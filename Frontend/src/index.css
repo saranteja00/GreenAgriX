@@ -1,0 +1,230 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   GREEN AGRIX — GLOBAL DESIGN TOKENS & BASE STYLES
+   ============================================================ */
+
+:root {
+  /* Brand colors */
+  --color-field-green:    #1F5C3D;
+  --color-field-mid:      #2e7d4f;
+  --color-field-light:    #54b28c;
+  --color-harvest-amber:  #E8A33D;
+  --color-signal-teal:    #0E8C8C;
+  --color-cream:          #FAF8F3;
+  --color-charcoal:       #2C3E35;
+  --color-charcoal-mid:   #4a5e54;
+  --color-charcoal-soft:  #718472;
+  /* Status colors */
+  --color-healthy:    #2e7d4f;
+  --color-caution:    #E8A33D;
+  --color-critical:   #C0392B;
+  /* Typography */
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+  /* Transitions */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-base: 220ms;
+  --duration-slow: 350ms;
+}
+
+/* ============================================================
+   BASE RESET & TYPOGRAPHY
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+  color: inherit;
+}
+
+/* Tabular numbers for data/stats */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+/* ============================================================
+   SCROLLBAR STYLING
+   ============================================================ */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c1ccc6; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #9aada2; }
+
+/* ============================================================
+   KEYFRAME ANIMATIONS
+   ============================================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes gaugeFill {
+  from { stroke-dashoffset: 339; }
+  to   { stroke-dashoffset: var(--gauge-offset, 100); }
+}
+@keyframes scanLine {
+  0%   { top: 0%; }
+  50%  { top: 93%; }
+  100% { top: 0%; }
+}
+@keyframes skeleton {
+  0%, 100% { opacity: 0.45; }
+  50%       { opacity: 0.9; }
+}
+@keyframes drawLine {
+  from { stroke-dashoffset: 1000; }
+  to   { stroke-dashoffset: 0; }
+}
+@keyframes barRise {
+  from { transform: scaleY(0); transform-origin: bottom; }
+  to   { transform: scaleY(1); transform-origin: bottom; }
+}
+@keyframes floatUp {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to   { background-position: 200% center; }
+}
+
+/* ============================================================
+   ANIMATION UTILITY CLASSES
+   ============================================================ */
+.animate-fade-up     { animation: fadeUp 0.22s var(--ease-out) both; }
+.animate-fade-in     { animation: fadeIn 0.18s ease-out both; }
+.animate-slide-left  { animation: slideInLeft 0.24s var(--ease-out) both; }
+.animate-float       { animation: floatUp 4s ease-in-out infinite; }
+.animate-skeleton    { animation: skeleton 1.6s ease-in-out infinite; }
+.animate-draw-line   {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawLine 1.5s ease-out forwards;
+}
+.animate-gauge-fill  { animation: gaugeFill 1.4s var(--ease-out) forwards; }
+
+/* Staggered children */
+.stagger-children > * { animation: fadeUp 0.2s var(--ease-out) both; }
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 60ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 120ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 180ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 240ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 360ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 420ms; }
+
+/* ============================================================
+   REDUCED MOTION — respect user preference
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html { scroll-behavior: auto; }
+}
+
+/* ============================================================
+   COMPONENT UTILITY CLASSES
+   ============================================================ */
+
+/* Gradient mesh hero background */
+.hero-mesh {
+  background-color: #f0f9f4;
+  background-image:
+    radial-gradient(at 20% 30%, rgba(46,125,79,0.14) 0%, transparent 50%),
+    radial-gradient(at 80% 10%, rgba(14,140,140,0.10) 0%, transparent 50%),
+    radial-gradient(at 60% 80%, rgba(232,163,61,0.08) 0%, transparent 50%);
+}
+
+/* Dashboard sidebar gradient */
+.sidebar-gradient {
+  background: linear-gradient(180deg, #1a4d34 0%, #0f2c1e 100%);
+}
+
+/* Glass card */
+.glass-card {
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.6);
+}
+
+/* Shimmer skeleton */
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(193,204,198,0.3) 0%,
+    rgba(220,226,222,0.7) 50%,
+    rgba(193,204,198,0.3) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+}
+
+/* Focus ring — accessibility */
+.focus-ring:focus-visible {
+  outline: 2px solid var(--color-signal-teal);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Custom scrollbar for sidebar */
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.2) transparent;
+}
+
+/* Chart draw-in */
+.recharts-line-curve {
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+  animation: drawLine 1.8s ease-out forwards;
+}
+
+/* Print styles for Reports page */
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; font-size: 14px; }
+  .print-card {
+    break-inside: avoid;
+    border: 1px solid #ddd;
+    margin-bottom: 16px;
+    padding: 16px;
+  }
+}
