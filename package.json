@@ -1,4 +1,13 @@
 {
+  "name": "green-agrix",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npm --prefix Frontend run dev",
+    "build": "npm --prefix Frontend run build",
+    "preview": "npm --prefix Frontend run preview",
+    "start": "npm --prefix Frontend run preview"
+  },
   "dependencies": {
     "lucide-react": "^1.34.0"
   }
