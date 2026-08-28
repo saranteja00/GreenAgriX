@@ -1,2 +1,2 @@
 # GreenAgriX
-AI-Powered Precision Agriculture & Mandi Intelligence Platform
+AI-Based Smart Farming and Market Management System
