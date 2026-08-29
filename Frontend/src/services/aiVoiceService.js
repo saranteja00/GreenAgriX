@@ -1,9 +1,9 @@
 // ─── GreenAgriX AI Voice Assistant & Agronomist Training Service ──────────
-// Connects to OpenAI API with specialized Agricultural Expert system prompt
+// Connects to NVIDIA NIM API with specialized Agricultural Expert system prompt
 // with strict bilingual (Tamil / English) enforcement and dual-language local knowledge base.
 
-const DEFAULT_OPENAI_KEY =
-  import.meta.env?.VITE_OPENAI_API_KEY || '';
+const DEFAULT_NVIDIA_KEY =
+  import.meta.env?.VITE_NVIDIA_API_KEY || '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';
 
 // Comprehensive Dual-Language Agricultural Knowledge Base
 export const AGRI_KNOWLEDGE_ENTRIES = [
@@ -66,12 +66,12 @@ export const AGRI_KNOWLEDGE_ENTRIES = [
 
 export const aiVoiceService = {
   /**
-   * Queries OpenAI Chat Completions API with trained Agronomist System Prompt
+   * Queries NVIDIA NIM Chat Completions API with trained Agronomist System Prompt
    * Strictly enforces output language (Tamil if language === 'ta', English if language === 'en')
    */
-  async queryAgronomistAI(userMessage, language = 'en', apiKey = DEFAULT_OPENAI_KEY) {
+  async queryAgronomistAI(userMessage, language = 'en', apiKey = DEFAULT_NVIDIA_KEY) {
     const isTa = language === 'ta';
-    const key = apiKey || DEFAULT_OPENAI_KEY;
+    const key = apiKey || DEFAULT_NVIDIA_KEY;
 
     // Strict system prompt based on language
     const systemPrompt = isTa
@@ -96,14 +96,14 @@ Keep response concise (under 75 words) so it is clear for voice listening.`;
     }
 
     try {
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      const response = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${key.trim()}`,
         },
         body: JSON.stringify({
-          model: 'gpt-4o-mini',
+          model: 'meta/llama-3.1-8b-instruct',
           messages: [
             {
               role: 'system',
@@ -122,7 +122,7 @@ Keep response concise (under 75 words) so it is clear for voice listening.`;
       });
 
       if (!response.ok) {
-        console.warn('OpenAI API status error, activating trained local knowledge fallback');
+        console.warn('NVIDIA NIM API status error, activating trained local knowledge fallback');
         return this.getLocalFallbackResponse(userMessage, language);
       }
 
@@ -130,7 +130,7 @@ Keep response concise (under 75 words) so it is clear for voice listening.`;
       const reply = data?.choices?.[0]?.message?.content;
       if (reply && reply.trim().length > 10) {
         return {
-          source: isTa ? 'OpenAI GPT-4o பயிர் மருத்துவர்' : 'OpenAI GPT-4o Agronomist',
+          source: isTa ? 'NVIDIA Llama பயிர் மருத்துவர்' : 'NVIDIA Llama Agronomist',
           text: reply.trim(),
         };
       }

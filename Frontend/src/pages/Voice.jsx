@@ -88,7 +88,7 @@ export default function Voice() {
     setErrorMessage('');
     setResponseQuery(queryText);
 
-    // Call trained OpenAI service with language enforcement
+    // Call trained NVIDIA NIM service with language enforcement
     const result = await aiVoiceService.queryAgronomistAI(queryText, currentLang);
 
     setResponseText(result.text);
@@ -177,8 +177,8 @@ export default function Voice() {
         </h1>
         <p className="text-charcoal-500 text-sm max-w-xl mx-auto font-medium">
           {isTamil
-            ? 'பயிர் நோய்கள், பூச்சி கட்டுப்பாடு, உர அட்டவணை மற்றும் பாசனம் பற்றி தமிழில் பேசுங்கள். OpenAI GPT-4o மூலம் உடனடி குரல் ஆலோசனை.'
-            : 'Ask questions in natural voice about plant diseases, fertilizer dosages, and irrigation. Powered by trained OpenAI GPT-4o.'}
+            ? 'பயிர் நோய்கள், பூச்சி கட்டுப்பாடு, உர அட்டவணை மற்றும் பாசனம் பற்றி தமிழில் பேசுங்கள். NVIDIA Llama மூலம் உடனடி குரல் ஆலோசனை.'
+            : 'Ask questions in natural voice about plant diseases, fertilizer dosages, and irrigation. Powered by NVIDIA Llama.'}}
         </p>
       </div>
 
