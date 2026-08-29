@@ -2,6 +2,14 @@
 // Connects to NVIDIA NIM API with specialized Agricultural Expert system prompt
 // with strict bilingual (Tamil / English) enforcement and dual-language local knowledge base.
 
+// On Netlify production: use the serverless proxy (avoids CORS).
+// On localhost dev: call NVIDIA directly with the API key.
+const IS_LOCALHOST = typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+const NVIDIA_DIRECT_URL = 'https://integrate.api.nvidia.com/v1/chat/completions';
+const NVIDIA_PROXY_URL = '/api/nvidia-proxy';
+
 const DEFAULT_NVIDIA_KEY =
   import.meta.env?.VITE_NVIDIA_API_KEY || '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';
 
@@ -96,12 +104,16 @@ Keep response concise (under 75 words) so it is clear for voice listening.`;
     }
 
     try {
-      const response = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
+      // Use Netlify proxy on production to avoid CORS; call NVIDIA directly on localhost
+      const apiUrl = IS_LOCALHOST ? NVIDIA_DIRECT_URL : NVIDIA_PROXY_URL;
+      const headers = {
+        'Content-Type': 'application/json',
+        ...(IS_LOCALHOST ? { Authorization: `Bearer ${key.trim()}` } : {}),
+      };
+
+      const response = await fetch(apiUrl, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${key.trim()}`,
-        },
+        headers,
         body: JSON.stringify({
           model: 'meta/llama-3.1-8b-instruct',
           messages: [
